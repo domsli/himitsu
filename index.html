@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <!-- Main Quill library -->
+    <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+    <!-- Theme included stylesheets -->
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Full container for quill (including the toolbar) -->
+    <div id="quill-text-editor">
+      <!-- Quill editor container -->
+      <div id="quill-editor"></div>
+    </div>
+
+    <script>
+      var editor = new Quill('#quill-editor', {
+        placeholder: 'Write about your day',
+        theme: 'snow',
+      });
+    </script>
+  </body>
+</html>
