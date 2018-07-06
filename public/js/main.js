@@ -1,4 +1,3 @@
-// ready() checks that document.body has loaded. This is required by the Quill library
 $(document).ready(function() {
   // Get the contents for today's daily
   var getDailyFromDate = function(date) {
