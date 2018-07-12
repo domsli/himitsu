@@ -1,3 +1,6 @@
+// definition here so that it can be referenced
+var saveChanges;
+
 $(document).ready(function() {
   // Get the contents for today's daily
   var getDailyFromDate = function(date) {
@@ -44,8 +47,7 @@ $(document).ready(function() {
     change = change.compose(delta);
   });
 
-  // Auto-save changes to the daily
-  setInterval(function() {
+  saveChanges = function() {
     if (change.length() > 0) {
       var date = picker.getDate();
       var content = JSON.stringify(editor.getContents());
@@ -58,12 +60,14 @@ $(document).ready(function() {
         success: function(data, err) {
           console.log("Successfully saved daily");
           change = new Delta();
+          alert("Successfully saved daily");
         },
         error: function(err) {
           console.log("Failed to save daily");
           console.log(err);
+          alert("Oops, failed to save daily...");
         }
       });
     }
-  }, 5000); // every 5 seconds
+  };
 });
