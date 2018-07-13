@@ -60,6 +60,7 @@ $(document).ready(function() {
         success: function(data, err) {
           console.log("Successfully saved daily");
           change = new Delta();
+          disableEditing();
           alert("Successfully saved daily");
         },
         error: function(err) {
@@ -69,5 +70,15 @@ $(document).ready(function() {
         }
       });
     }
+  };
+
+  disableEditing = function() {
+    editor.disable();
+    $(".ql-toolbar").addClass("hide-toolbar");
+  };
+
+  enableEditing = function() {
+    editor.enable(true);
+    $(".ql-toolbar").removeClass("hide-toolbar");
   };
 });

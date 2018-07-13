@@ -3,3 +3,7 @@
   width: 80%;
   height: 500px;
 }
+
+.ql-toolbar.hide-toolbar {
+  visibility: hidden; /* hide it, but keep the space */
+}
