@@ -60,7 +60,6 @@ $(document).ready(function() {
         success: function(data, err) {
           console.log("Successfully saved daily");
           change = new Delta();
-          disableEditing();
           alert("Successfully saved daily");
         },
         error: function(err) {
@@ -72,13 +71,41 @@ $(document).ready(function() {
     }
   };
 
+  function cancelBubble(e) {
+    var evt = e ? e:window.event;
+    if (!evt) return;
+    if (evt.stopPropagation) evt.stopPropagation();
+    if (evt.cancelBubble != null) evt.cancelBubble = true;
+  }
+
   disableEditing = function() {
     editor.disable();
     $(".ql-toolbar").addClass("hide-toolbar");
+    $(".ql-editor").removeClass("active");
+    console.log("Disabled editing");
   };
 
   enableEditing = function() {
     editor.enable(true);
     $(".ql-toolbar").removeClass("hide-toolbar");
+    $(".ql-editor").addClass("active");
+    console.log("Enabled editing");
   };
+
+  // start with the editor being disabled
+  disableEditing();
+
+  $("body").click(function(e) {
+    cancelBubble(e);
+    disableEditing(e);
+  });
+
+  $(".ql-editor").click(function(e) {
+    cancelBubble(e);
+    enableEditing(e);
+  });
+
+  $(".ql-toolbar").click(function(e) {
+    cancelBubble(e); // prevent bubbling of click event to body, which disables editing
+  })
 });
