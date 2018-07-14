@@ -6,6 +6,9 @@ var dailyTitle = "";
 $(document).ready(function() {
   // Get the contents for today's daily
   var getDailyFromDate = function(date) {
+    dirty = false;
+    dailyTitle = "";
+
     $.get({
       url: "/daily/" + date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate(),
       datatype: "json",
@@ -22,18 +25,22 @@ $(document).ready(function() {
             dailyTitle = data.title;
           }
           // set the editor
-          editor.setContents(JSON.parse(data.content));
+          settingInitialEditorContents(JSON.parse(data.content));
           editor.on('text-change', function(delta) {
             change = change.compose(delta);
             // change label if it wasn't dirty
             if (!dirty) {
-              $("#daily-title-label").val("*" + dailyTitle);
+              var titleLabel = dailyTitle ? dailyTitle : "Untitled";
+              $("#daily-title-label").val("*" + titleLabel);
             }
             dirty = true;
           });
         }
         else {
-          editor.setContents(""); // empty contents
+          var titleLabel = "Untitled";
+          $("#daily-title-label").val(titleLabel);
+          $("#daily-title-label").addClass("untitled");
+          settingInitialEditorContents(""); // empty contents
         }
         change = new Delta(); // change is initialized below
       },
@@ -42,6 +49,15 @@ $(document).ready(function() {
         console.log(err);
       }
     });
+  };
+
+  // Hacky way to set contents. The dirty flag makes sure that
+  // the initial setting is already considered dirty, so there
+  // is no need to prefix the title with *.
+  var settingInitialEditorContents = function(contents) {
+    dirty = true;
+    editor.setContents(contents);
+    dirty = false;
   };
 
   // Load the date picker
