@@ -4,6 +4,9 @@
     <!-- Theme included stylesheets -->
     <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
 
+    <!-- Additional styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!-- Pikaday -->
     <link rel="stylesheet" href="pikaday/css/pikaday.css">
     <script src="pikaday/pikaday.js"></script>
@@ -26,8 +29,13 @@
     <!-- Date picker UI -->
     <input id="datepicker" aria-label="Use the arrow keys to pick a date" type="text">
 
-    <!-- Full container for quill (including the toolbar) -->
-    <div id="quill-text-editor">
+    <!-- Full container for the daily (includes quill editor) -->
+    <div id="daily-container">
+      <!-- Title editor -->
+      <div id="daily-title">
+        <input id="daily-title-label"></input>
+        <i class="fa fa-edit"></i>
+      </div>
       <!-- Quill editor container -->
       <div id="quill-editor"></div>
     </div>

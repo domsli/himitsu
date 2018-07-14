@@ -1,5 +1,7 @@
 // definition here so that it can be referenced
 var saveChanges;
+var dirty = false;
+var dailyTitle = "";
 
 $(document).ready(function() {
   // Get the contents for today's daily
@@ -10,7 +12,25 @@ $(document).ready(function() {
       success: function(data, err) {
         console.log("Successfully got daily for", date);
         if (data) {
+          // set the title
+          var titleLabel = (data.title) ? data.title : "Untitled";
+          $("#daily-title-label").val(titleLabel);
+          if (!data.title) {
+            $("#daily-title-label").addClass("untitled");
+          }
+          else {
+            dailyTitle = data.title;
+          }
+          // set the editor
           editor.setContents(JSON.parse(data.content));
+          editor.on('text-change', function(delta) {
+            change = change.compose(delta);
+            // change label if it wasn't dirty
+            if (!dirty) {
+              $("#daily-title-label").val("*" + dailyTitle);
+            }
+            dirty = true;
+          });
         }
         else {
           editor.setContents(""); // empty contents
@@ -43,32 +63,33 @@ $(document).ready(function() {
 
   // Store accumulated changes
   var change = new Delta();
-  editor.on('text-change', function(delta) {
-    change = change.compose(delta);
-  });
 
   saveChanges = function() {
-    if (change.length() > 0) {
-      var date = picker.getDate();
-      var content = JSON.stringify(editor.getContents());
-      $.ajax({
-        method: 'PUT',
-        url: "/daily/" + date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate(),
-        contentType: 'application/json',
-        data: JSON.stringify({ content: content }),
-        datatype: "json",
-        success: function(data, err) {
-          console.log("Successfully saved daily");
-          change = new Delta();
-          alert("Successfully saved daily");
-        },
-        error: function(err) {
-          console.log("Failed to save daily");
-          console.log(err);
-          alert("Oops, failed to save daily...");
-        }
-      });
+    var date = picker.getDate();
+    var content = JSON.stringify(editor.getContents());
+    var data = { content: content }
+    if (!($("#daily-title-label").hasClass("untitled"))) {
+      data.title = dailyTitle;
     }
+    $.ajax({
+      method: 'PUT',
+      url: "/daily/" + date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate(),
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      datatype: "json",
+      success: function(data, err) {
+        console.log("Successfully saved daily");
+        change = new Delta();
+        $("#daily-title-label").val(dailyTitle);
+        dirty = false;
+        alert("Successfully saved daily");
+      },
+      error: function(err) {
+        console.log("Failed to save daily");
+        console.log(err);
+        alert("Oops, failed to save daily...");
+      }
+    });
   };
 
   function cancelBubble(e) {
@@ -107,5 +128,29 @@ $(document).ready(function() {
 
   $(".ql-toolbar").click(function(e) {
     cancelBubble(e); // prevent bubbling of click event to body, which disables editing
-  })
+  });
+
+  $("#daily-title-label").focus(function(e) {
+    $(this).val(dailyTitle);
+    $(this).addClass("active");
+    if ($(this).hasClass("untitled")) {
+      $(this).val("");
+    }
+  });
+
+  $("#daily-title-label").blur(function(e) {
+    $(this).removeClass("active");
+    var prefix = dirty ? "*" : "";
+    if ($(this).hasClass("untitled")) {
+      $(this).val(prefix + "Untitled");
+    }
+    else {
+      $(this).val(prefix + dailyTitle)
+    }
+  });
+
+  $("#daily-title-label").on("input", function() {
+    $(this).removeClass("untitled");
+    dailyTitle = $(this).val();
+  });
 });

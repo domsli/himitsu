@@ -59,7 +59,14 @@ app.put('/daily/:year/:month/:date', jsonParser, function(request, response){
     year: parseInt(request.params.year),
     month: parseInt(request.params.month),
     date: parseInt(request.params.date),
-  }, { $set: { content: request.body.content } }, {upsert: true, new: true}, function(err, doc) {
+  }, { 
+    $set: {
+      title: request.body.title, 
+      content: request.body.content
+    }
+  }, {
+    upsert: true, new: true
+  }, function(err, doc) {
     if (err) {
       console.log(err);
     }

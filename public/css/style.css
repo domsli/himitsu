@@ -1,11 +1,50 @@
-#quill-text-editor {
+* {
+  font-family: arial;
+}
+
+#daily-container {
   margin: auto;
   width: 80%;
   height: 500px;
 }
 
+#daily-title {
+  display: table;
+}
+
+#daily-title-label {
+  display: inline-block;
+  /*min-width: 100px;*/
+  padding-right: 20px;
+  border: none;
+  font-size: 24px;
+}
+
+.fa.fa-edit {
+  visibility: hidden;
+}
+
+#daily-title:hover {
+  color: gray;
+}
+
+.untitled {
+  opacity: 0.5;
+}
+
+#daily-title-label.active {
+  opacity: 0.5;
+}
+
+#daily-title:hover .fa.fa-edit {
+  display: table-cell;
+  visibility: visible;
+  vertical-align: middle;
+  font-size: 14pt;
+}​
+
 .ql-toolbar.hide-toolbar {
-  visibility: hidden; /* hide it, but keep the space */
+  display: none;
 }
 
 .ql-editor {
