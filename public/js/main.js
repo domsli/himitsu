@@ -1,3 +1,11 @@
+// JS
+import $ from 'jquery';
+import Pikaday from 'pikaday';
+import Quill from 'quill';
+
+// Styles
+import '../scss/style.scss';
+
 // definition here so that it can be referenced
 var saveChanges;
 var dirty = false;
@@ -115,14 +123,14 @@ $(document).ready(function() {
     if (evt.cancelBubble != null) evt.cancelBubble = true;
   }
 
-  disableEditing = function() {
+  var disableEditing = function() {
     editor.disable();
     $(".ql-toolbar").addClass("hide-toolbar");
     $(".ql-editor").removeClass("active");
     console.log("Disabled editing");
   };
 
-  enableEditing = function() {
+  var enableEditing = function() {
     editor.enable(true);
     $(".ql-toolbar").removeClass("hide-toolbar");
     $(".ql-editor").addClass("active");
