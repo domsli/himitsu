@@ -4,11 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 // JS
-import Editor from './editor';
+import Note from './note';
 
 // Styles
 import '../scss/style.scss';
 
 $(document).ready(() => {
-  ReactDOM.render(<Editor/>, document.getElementById("quill-editor"));
+  ReactDOM.render(<Note/>, document.getElementById("note-react"));
 });
