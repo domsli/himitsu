@@ -39,7 +39,7 @@ class Note extends React.Component {
           onChange={this.onContentChange}/>
         <button onClick={this.saveContent}>Save</button>
       </div>
-    )
+    );
   }
 };
 
