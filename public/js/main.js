@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 // JS
 import Note from './note';
 import DirectoryTree from './directory_tree';
+import FileMetadata from './file'
 
 // Styles
 import '../scss/style.scss';
@@ -13,21 +14,21 @@ import '../scss/style.scss';
 $(document).ready(() => {
   ReactDOM.render(<Note/>, document.getElementById("note-react"));
   
-  const files = [
-    {title: 'hello', isDirectory: false},
-    {title: 'Another', isDirectory: false},
-    {title: 'Folder 2', isDirectory: true, collapsed: true, files: [
-      {title: 'world', isDirectory: false},
-      {title: 'Folder 3', isDirectory: true, collapsed: false, files: [
-        {title: 'Note', isDirectory: false},
-        {title: 'Note 2', isDirectory: false}
-      ]},
-      {title: 'This is going to be a fairly long one. Should extend more than one line', isDirectory: false},
-      {title: 'But there is more!', isDirectory: false}
-    ]}
+  const childrenMetadata = [
+    FileMetadata.makeNoteMetadata('hello'),
+    FileMetadata.makeNoteMetadata('Another'),
+    FileMetadata.makeFolderMetadata('Folder 2', true, [
+        FileMetadata.makeNoteMetadata('world'),
+        FileMetadata.makeFolderMetadata('Folder 3', true, [
+            FileMetadata.makeNoteMetadata('Note'),
+            FileMetadata.makeNoteMetadata('Note 2')
+          ]),
+        FileMetadata.makeNoteMetadata('This is going to be a fiarly long one. Should extend more than one line'),
+        FileMetadata.makeNoteMetadata('But there is more!'),     
+      ]),
+    FileMetadata.makeNoteMetadata('Great stuff!'),
   ];
+  const metadata = FileMetadata.makeFolderMetadata('Folder', true, childrenMetadata);
   ReactDOM.render(<DirectoryTree
-    title={'Folder'}
-    files={files}
-    collapsed={true}/>, document.getElementById("directory-tree-react"));
+    metadata={metadata}/>, document.getElementById("directory-tree-react"));
 });
